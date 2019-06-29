@@ -53,6 +53,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImageProcess2.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Program2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,6 +81,58 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="images\-tCwodsN8Uw.jpg" />
+    <Content Include="images\4o2vwgYTMkM.jpg" />
+    <Content Include="images\5jd6ZJHnKwo.jpg" />
+    <Content Include="images\6CxiNWJceow.jpg" />
+    <Content Include="images\6kov0YQCRFg.jpg" />
+    <Content Include="images\6lhaBHTXvPs.jpg" />
+    <Content Include="images\83zPlx177kk.jpg" />
+    <Content Include="images\84JNi-0BkAQ.jpg" />
+    <Content Include="images\ArpZRPreOHg.jpg" />
+    <Content Include="images\ayxILjlINlg.jpg" />
+    <Content Include="images\bSsME3J0X5s.jpg" />
+    <Content Include="images\bUdM4u1mGIU.jpg" />
+    <Content Include="images\CIxI3XL1Sz4.jpg" />
+    <Content Include="images\CwEjW-Q5SHQ.jpg" />
+    <Content Include="images\CzKI2-nejUk.jpg" />
+    <Content Include="images\do4a-a29Ru4.jpg" />
+    <Content Include="images\ELISIYFi-ws.jpg" />
+    <Content Include="images\eTLKz1gEVoQ.jpg" />
+    <Content Include="images\FhQyFxgdeKA.jpg" />
+    <Content Include="images\FZNaviFVggQ.jpg" />
+    <Content Include="images\GUU6R_UuY7k.jpg" />
+    <Content Include="images\H7srcJh4hF8.jpg" />
+    <Content Include="images\heeEKtHAYEg.jpg" />
+    <Content Include="images\Hui8VyCnqJI.jpg" />
+    <Content Include="images\i3AzQT0vejk.jpg" />
+    <Content Include="images\iTppyaWMJ70.jpg" />
+    <Content Include="images\JYiTP2GZhqM.jpg" />
+    <Content Include="images\kr1Cx6JSlcE.jpg" />
+    <Content Include="images\kwdQUpw_UUE.jpg" />
+    <Content Include="images\KwEvTrWK004.jpg" />
+    <Content Include="images\l0hhv126ykY.jpg" />
+    <Content Include="images\L0rxoED50k0.jpg" />
+    <Content Include="images\lZR4hlD56uY.jpg" />
+    <Content Include="images\NxCUU0lujD8.jpg" />
+    <Content Include="images\OceHnUOl7vI.jpg" />
+    <Content Include="images\PdbSMKkmU8Y.jpg" />
+    <Content Include="images\pR9D-7ztGmA.jpg" />
+    <Content Include="images\sEEu4XL1LO8.jpg" />
+    <Content Include="images\SM6SrIidrq4.jpg" />
+    <Content Include="images\sZnnEFvpKqY.jpg" />
+    <Content Include="images\TBNbpd6Xs_4.jpg" />
+    <Content Include="images\Tz3A1ByTkq0.jpg" />
+    <Content Include="images\VF3lq0SMlxY.jpg" />
+    <Content Include="images\WX2LJRq46bg.jpg" />
+    <Content Include="images\XDTLnFdXnEw.jpg" />
+    <Content Include="images\xOZS9DeDe88.jpg" />
+    <Content Include="images\x_G5TJZQF1A.jpg" />
+    <Content Include="images\yn97LNy0bao.jpg" />
+    <Content Include="images\Zzz2AkwQiDY.jpg" />
+    <Content Include="images\_NdyDD-tZlM.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

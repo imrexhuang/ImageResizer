@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 
 namespace POCConsole
@@ -16,7 +17,10 @@ namespace POCConsole
                 obj.ObjectID = i;
                 obj.signal = new ManualResetEvent(false);
                 events.Add(obj.signal);
-                WaitCallback callback = new WaitCallback(ThreadFunction);
+
+
+                WaitCallback callback = new WaitCallback(ThreadFunctionImageProcess);
+                //WaitCallback callback = new WaitCallback(ThreadFunction);
                 ThreadPool.QueueUserWorkItem(callback, obj);
             }
             WaitForAll(events.ToArray());
@@ -43,6 +47,7 @@ namespace POCConsole
             }
             return result;
         }
+
         static void ThreadFunction(object threadobj)
         {
             ThreadPoolObj obj = threadobj as ThreadPoolObj;
@@ -53,6 +58,26 @@ namespace POCConsole
                 obj.signal.Set();
             }
         }
+
+        static void ThreadFunctionImageProcess(object threadobj)
+        {
+            ThreadPoolObj obj = threadobj as ThreadPoolObj;
+            if (obj != null)
+            {
+                Console.WriteLine(obj.ObjectID.ToString());
+                //Thread.Sleep(2000); // Just Wait To Show Syncronization 
+
+                string sourcePath = Path.Combine(Environment.CurrentDirectory, "images");
+                string destinationPath = Path.Combine(Environment.CurrentDirectory, "output"); ;
+
+                ImageProcess2 imageProcess = new ImageProcess2();
+                imageProcess.Clean(destinationPath);
+                imageProcess.ResizeImages(sourcePath, destinationPath, 2.0);
+
+                obj.signal.Set();
+            }
+        }
+
     }
     class ThreadPoolObj
     {
