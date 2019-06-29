@@ -13,8 +13,9 @@ namespace ImageResizer
 
     public class ImageProcess
     {
-        //https://docs.microsoft.com/zh-tw/dotnet/api/system.threading.waithandle.waitall?view=netframework-4.8
-        private ManualResetEvent mre = new ManualResetEvent(false);
+        static String picSrcPath = "";
+        static String picDestPath = "";
+        static double picScale;
 
         /// <summary>
         /// 清空目的目錄下的所有檔案與目錄
@@ -50,21 +51,38 @@ namespace ImageResizer
 
             var allFiles = FindImages(sourcePath);
 
+            List<ManualResetEvent> events = new List<ManualResetEvent>();
+
             int fileCounter = 0;
             foreach (var filePath in allFiles)
             {
                 fileCounter++;
 
+                //寫法一:等待全部Thread 都已經 Complete
+                //參考 http://dotnetstep.blogspot.com/2009/01/threadpool-wait-for-all-thread-to.html
+                ThreadPoolObj tpobj = new ThreadPoolObj();
+                tpobj.ObjectID = fileCounter;
+                tpobj.signal = new ManualResetEvent(false);
+                tpobj.picSrcPath = filePath;
+                tpobj.picDestPath = destPath;
+                tpobj.picScale = scale;
+                events.Add(tpobj.signal);
+                WaitCallback callback = new WaitCallback(ThreadFunctionImageProcess);
                 ThreadPool.SetMinThreads(4, 4);
                 ThreadPool.SetMaxThreads(12, 12);
-                ThreadPool.QueueUserWorkItem((state) =>
-                {
-                    Console.WriteLine("{0} on thread {1}", filePath, Thread.CurrentThread.ManagedThreadId);
-                    ResizeImagesTask(filePath, destPath, scale);
-                });
+                ThreadPool.QueueUserWorkItem(callback, tpobj);
+
+
+                //寫法=二:
+                //ThreadPool.QueueUserWorkItem((state) =>
+                //{
+                //    Console.WriteLine("{0} on thread {1}", filePath, Thread.CurrentThread.ManagedThreadId);
+                //    ResizeImagesTask(filePath, destPath, scale);
+                //});
 
             }
 
+            WaitForAll(events.ToArray());
 
             sw.Stop();
 
@@ -138,8 +156,54 @@ namespace ImageResizer
             return resizedbitmap;
         }
 
+        //http://dotnetstep.blogspot.com/2009/01/threadpool-wait-for-all-thread-to.html
+        bool WaitForAll(ManualResetEvent[] events)
+        {
+            bool result = false;
+            try
+            {
+                if (events != null)
+                {
+                    for (int i = 0; i < events.Length; i++)
+                    {
+                        events[i].WaitOne();
+                    }
+                    result = true;
+                }
+            }
+            catch
+            {
+                result = false;
+            }
+            return result;
+        }
 
+        //http://dotnetstep.blogspot.com/2009/01/threadpool-wait-for-all-thread-to.html
+        void ThreadFunctionImageProcess(object threadobj)
+        {
+            ThreadPoolObj obj = threadobj as ThreadPoolObj;
+            if (obj != null)
+            {
+                //Console.WriteLine(obj.ObjectID.ToString());
 
+                Console.WriteLine("{0} on thread {1}", obj.picSrcPath, Thread.CurrentThread.ManagedThreadId);
+                ResizeImagesTask(obj.picSrcPath, obj.picDestPath, obj.picScale);
+
+                obj.signal.Set();
+            }
+        }
+
+    }
+
+    //http://dotnetstep.blogspot.com/2009/01/threadpool-wait-for-all-thread-to.html
+    class ThreadPoolObj
+    {
+        public int ObjectID;
+        public ManualResetEvent signal;
+
+        public String picSrcPath;
+        public String picDestPath;
+        public double picScale;
     }
 
 }
