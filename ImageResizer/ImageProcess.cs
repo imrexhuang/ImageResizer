@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -9,8 +10,12 @@ using System.Threading.Tasks;
 
 namespace ImageResizer
 {
+
     public class ImageProcess
     {
+        //https://docs.microsoft.com/zh-tw/dotnet/api/system.threading.waithandle.waitall?view=netframework-4.8
+        private ManualResetEvent mre = new ManualResetEvent(false);
+
         /// <summary>
         /// 清空目的目錄下的所有檔案與目錄
         /// </summary>
@@ -40,12 +45,33 @@ namespace ImageResizer
         /// <param name="scale">縮放比例</param>
         public void ResizeImages(string sourcePath, string destPath, double scale)
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
             var allFiles = FindImages(sourcePath);
+
+            int fileCounter = 0;
             foreach (var filePath in allFiles)
             {
-                Thread thread = new Thread(() => ResizeImagesTask(filePath, destPath, scale));
-                thread.Start();
+                fileCounter++;
+
+                ThreadPool.SetMinThreads(4, 4);
+                ThreadPool.SetMaxThreads(12, 12);
+                ThreadPool.QueueUserWorkItem((state) =>
+                {
+                    Console.WriteLine("{0} on thread {1}", filePath, Thread.CurrentThread.ManagedThreadId);
+                    ResizeImagesTask(filePath, destPath, scale);
+                });
+
             }
+
+
+            sw.Stop();
+
+            Console.WriteLine("本次產檔數量" + fileCounter);
+            Console.WriteLine($"花費時間: {sw.ElapsedMilliseconds} ms");
+   
+
         }
 
         /// <summary>
@@ -115,4 +141,5 @@ namespace ImageResizer
 
 
     }
+
 }
