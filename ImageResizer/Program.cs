@@ -10,8 +10,9 @@ namespace ImageResizer
     class Program
     {
         //測試環境:筆電 i7-6500U、20 GB DDR4 RAM 、SanDisk SD8SN8U512G1002 M2 SSD 
-        //調整前:8572ms , 8602ms , 8148ms , 7846ms , 8272ms
-        //調整後:筆電(i7-6500u)  3252ms , 3605ms , 2282ms , 4316ms , 3298ms
+        //測試檔案: 67個jpg檔,總共30.2MB ,VS組建組態:Debug
+        //調整前:42829ms ,  42942ms ,42712ms  =>平均42828ms
+        //調整後(ThreadPool版本):28251ms , 25335ms , 29868ms =>平均27818ms ,速度提升35%
         static void Main(string[] args)
         {
             string sourcePath = Path.Combine(Environment.CurrentDirectory, "images");
